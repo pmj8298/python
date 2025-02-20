@@ -14,7 +14,6 @@ def nsise():
     aname = soup.select('td.number:nth-child(3)')
     
     for i, (n,a) in enumerate(zip(name,aname),1):
-    # for i, n, a in enumerate(name,1, aname):
-        print(f'{i}위: {n.text} {a.text}')
+        print(f'{i}위: {n.text} {a.text}원')
 if __name__=='__main__':
     mel()
