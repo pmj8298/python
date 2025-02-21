@@ -1,45 +1,40 @@
-import asyncio
-# import nest_asyncio #주피터랩용
-from dotenv import load_dotenv
-import os
-
-# .env 파일 로드
-load_dotenv()
-
-
 from telegram import Update
 from telegram.ext import Application, CommandHandler, MessageHandler, filters, CallbackContext
-# nest_asyncio.apply()
 
-TELEGRAM_TOKEN = os.getenv("TELEGRAM_TOKEN")
+TOKEN = '77245608318279:AAHGYVXEDLbGdRduaJxMrfGSX7lvwuh9QRw'
 
-async def start( update, context):
-    await context.bot.send_message(chat_id=update.effective_chat.id, text="봇이 가동되었습니다!")
+TRIGGER_WORDS = {
+    '안녕':'안녕하세요! 반가워용😊',
+    '정보':'어떤 정보가 필요하세요?🤔',
+    '기분':'오늘 기분이 좋아요😍'
+}
 
-async def handle_message(update , context ):
-    user_message = update.message.text.lower()  # Text -> text
+async def start(update, context):
+    await update.message.reply_text('안녕! 무엇을 도와드릴까요?')
+async def monitor_chat(update, context):
+    user_text = update.message.text # 감지된 메시지들 ex.택배물건
+    chat_id = update.message.chat_id # 메시지가 온 채팅방  ex. 택배 배송지
 
-    if "선생님" in user_message:
-        response = "수업열심히 해봅시다!"
-    elif "날씨" in user_message:
-        response = "오늘은 추워요~~"
-    print(response)
+    for key, res in TRIGGER_WORDS.items():
+        if key in user_text:
+            await context.bot.send_message(chat_id = chat_id, text = res)
+            break #한개의 키워드에만 반응
 
-    #응답 메세지 전송
-    await context.bot.send_message(chat_id=update.effective_chat.id, text=response)
+def main():
+    app = Application.builder().token(TOKEN).build()
 
-async def main():
-    application = Application.builder().token(TELEGRAM_TOKEN).build()
-    await application.initialize() # 초기화 필수
+    # 명령어 핸들러 추가
+    app.add_handler(CommandHandler('start',start))
 
-    # 핸들러 추가
-    application.add_handler(CommandHandler("start", start))
-    application.add_handler(MessageHandler(filters.TEXT & ~filters.COMMAND, handle_message))
-    
-    await application.start()
-    print("봇이 실행중 입니다.")
+    # 응답 핸들러 추가
+    # ~은 TEXT는 하되, COMMAND는 하지마라
+    app.add_handler(MessageHandler(filters.TEXT & ~filters.COMMAND, monitor_chat))
 
-    await application.updater.start_polling()
+    print('봇이 실행중입니다. 모니터링 중...')
+    app.run_polling()
+
+
+
 
 if __name__=='__main__':
-    asyncio.run(main())
+   main()
