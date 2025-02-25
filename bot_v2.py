@@ -3,7 +3,7 @@ from telegram.ext import Application, CommandHandler, MessageHandler, filters, C
 import talk_team1 as tk
 import gemini
 
-TOKEN = '77245682790831:AAHGYVXEDLbGdRduaJxMrfGSX7lvwuh9QRw'
+TOKEN = '71733108316538:AAETkO83Pry573XGynngAUVC6XT86qxc0jQ'
 
 # TRIGGER_WORDS = {
 #     '안녕':'안녕하세요! 반가워용😊',
@@ -13,6 +13,10 @@ TOKEN = '77245682790831:AAHGYVXEDLbGdRduaJxMrfGSX7lvwuh9QRw'
 
 async def start(update, context):
     await update.message.reply_text('안녕! 무엇을 도와드릴까요?')
+
+async def send_photo(update, context):
+    photo_url = 'https://i.namu.wiki/i/R0AhIJhNi8fkU2Al72pglkrT8QenAaCJd1as-d_iY6MC8nub1iI5VzIqzJlLa-1uzZm--TkB-KHFiT-P-t7bEg.webp'
+
 async def monitor_chat(update, context):
     user_text = update.message.text # 감지된 메시지들 ex.택배물건
     chat_id = update.message.chat_id # 메시지가 온 채팅방  ex. 택배 배송지
