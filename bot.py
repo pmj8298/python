@@ -1,7 +1,8 @@
 from telegram import Update
 from telegram.ext import Application, CommandHandler, MessageHandler, filters, CallbackContext
+import talk_db as tk
 
-TOKEN = '77245608318279:AAHGYVXEDLbGdRduaJxMrfGSX7lvwuh9QRw'
+TOKEN = '7724568279:AAHGYVXEDLbGdRduaJxMrfGSX7lvwuh9QRw'
 
 TRIGGER_WORDS = {
     '안녕':'안녕하세요! 반가워용😊',
@@ -15,7 +16,7 @@ async def monitor_chat(update, context):
     user_text = update.message.text # 감지된 메시지들 ex.택배물건
     chat_id = update.message.chat_id # 메시지가 온 채팅방  ex. 택배 배송지
 
-    for key, res in TRIGGER_WORDS.items():
+    for key, res in tk.TRIGGER_WORDS.items():
         if key in user_text:
             await context.bot.send_message(chat_id = chat_id, text = res)
             break #한개의 키워드에만 반응
