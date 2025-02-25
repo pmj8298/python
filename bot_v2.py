@@ -1,14 +1,15 @@
 from telegram import Update
 from telegram.ext import Application, CommandHandler, MessageHandler, filters, CallbackContext
-import talk_db as tk
+import talk_team1 as tk
+import gemini
 
 TOKEN = '77245682790831:AAHGYVXEDLbGdRduaJxMrfGSX7lvwuh9QRw'
 
-TRIGGER_WORDS = {
-    '안녕':'안녕하세요! 반가워용😊',
-    '정보':'어떤 정보가 필요하세요?🤔',
-    '기분':'오늘 기분이 좋아요😍'
-}
+# TRIGGER_WORDS = {
+#     '안녕':'안녕하세요! 반가워용😊',
+#     '정보':'어떤 정보가 필요하세요?🤔',
+#     '기분':'오늘 기분이 좋아요😍'
+# }
 
 async def start(update, context):
     await update.message.reply_text('안녕! 무엇을 도와드릴까요?')
@@ -16,10 +17,16 @@ async def monitor_chat(update, context):
     user_text = update.message.text # 감지된 메시지들 ex.택배물건
     chat_id = update.message.chat_id # 메시지가 온 채팅방  ex. 택배 배송지
 
-    for key, res in tk.TRIGGER_WORDS.items():
-        if key in user_text:
-            await context.bot.send_message(chat_id = chat_id, text = res)
-            break #한개의 키워드에만 반응
+    if 'gpt' in user_text:
+        res = aiai(user_text.replace('gpt',''))
+        await context.bot.send_message(chat_id = chat_id, text = res)
+    elif '영화정보' in user_text: pass
+        #await 영화정보크롤링()함수를 실행
+    else:
+        for key, res in tk.TRIGGER_WORDS.items():
+            if key in user_text:
+                await context.bot.send_message(chat_id = chat_id, text = res)
+                break #한개의 키워드에만 반응
 
 def main():
     app = Application.builder().token(TOKEN).build()
