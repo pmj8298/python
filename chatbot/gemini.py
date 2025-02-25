@@ -1,7 +1,15 @@
 # 구글 Gemini AI
 from google import genai
+from dotenv import load_dotenv
+import os
+
+#.env 파일 로드
+load_dotenv()
+
+gemini_key = os.getenv('GEMINI_KEY')
+
 def aiai(text):
-    client = genai.Client(api_key="AIzaSyDee7uGhnoMImMm-qK3UDELPAQP54DJd840831")
+    client = genai.Client(api_key=gemini_key)
     
     response = client.models.generate_content(
         model="gemini-2.0-flash",
